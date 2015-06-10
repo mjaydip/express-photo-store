@@ -50,7 +50,7 @@ module.exports = {
                 } else {
                     var tempPath = req.files.file.path,
                         ext = path.extname(req.files.file.name).toLowerCase(),
-                        targetPath = path.resolve('./public/upload/temp' + imgUrl + ext);
+                        targetPath = path.resolve('./public/upload/temp/' + imgUrl + ext);
 
                     if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.gif') {
                         fs.rename(tempPath, targetPath, function(err) {
@@ -116,7 +116,7 @@ module.exports = {
             function(err, image) {
                 if (err) { throw err; }
 
-                fs.unlink(path.resolve('./public/upload/temp' + image.filename),
+                fs.unlink(path.resolve('./public/upload/temp/' + image.filename),
                     function(err) {
                         if (err) { throw err; }
 
