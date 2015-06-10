@@ -9,6 +9,7 @@ app.set('views',__dirname+'/views');
 app=config(app);
 
 mongoose.connect('mongodb://mjaydip:img@ds035260.mongolab.com:35260/heroku_app36464434');
+//mongoose.connect('mongodb://localhost/imgUploader');
 mongoose.connection.on('open',function(){
 	console.log('Connected to mongoose');
 });

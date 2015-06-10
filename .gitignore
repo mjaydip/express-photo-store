@@ -42,7 +42,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 node_modules
-.idea\*
-.idea/*.*
+.idea
 *.bak
-.idea/workspace.xml
+public/upload/temp
