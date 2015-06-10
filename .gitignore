@@ -44,5 +44,5 @@ Temporary Items
 node_modules
 .idea\*
 .idea/*.*
-.idea/workspace.xml
 *.bak
+.idea/workspace.xml
