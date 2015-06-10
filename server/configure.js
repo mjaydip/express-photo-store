@@ -33,7 +33,7 @@ module.exports=function(app){
 		app.use(connect.errorHandler());
 	}
 	routes.initialize(app);
-	//Ensure the temporary upload folder exist
+	//Ensure the temporary upload folder exists
 	fs.exists(path.join(__dirname,'../public/upload/temp'),function(exists){
 		if(!exists){
 			fs.mkdir(path.join(__dirname,'../public/upload'),function(err){
