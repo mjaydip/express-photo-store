@@ -116,7 +116,7 @@ module.exports = {
             function(err, image) {
                 if (err) { throw err; }
 
-                fs.unlink(path.resolve('./public/upload/temp/' + image.filename),
+                fs.unlink(path.join(__dirname,'../public/upload/temp/') + image.filename,
                     function(err) {
                         if (err) { throw err; }
 
