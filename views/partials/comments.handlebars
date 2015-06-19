@@ -9,7 +9,7 @@
             {{#each sidebar.comments}}
             <li class="media">
                 <a class="pull-left" href="/images/{{ image.uniqueId }}">
-                    <img class="media-object" width="45" height="45" src="https://s3.amazonaws.com/imguploader-assets/temp-images/{{ image.filename }}">
+                    <img class="media-object" width="45" height="45" src="{{ image.signedURL }}">
                 </a>
                 <div class="media-body">
                     {{comment}}<br/>
