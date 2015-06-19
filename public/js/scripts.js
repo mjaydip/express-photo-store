@@ -34,8 +34,13 @@ $(function(){
                     $this.removeClass('btn-danger').addClass('btn-success');
                     $this.find('i').removeClass('fa-times').addClass('fa-check');
                     $this.append('<span> Deleted!</span>');
+                    window.location.replace('/');
                 }
             });
         }
+    });
+
+    $('#login-btn').click(function(){
+        $(this).html('<i class="fa fa-spinner fa-spin"></i> Uploading Image...');
     });
 });
