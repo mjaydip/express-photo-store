@@ -13,7 +13,11 @@ var s3fsImpl = new s3fs(S3_BUCKET+'/temp-images', {
     accessKeyId: AWS_ACCESS_KEY,
     secretAccessKey: AWS_SECRET_KEY
 });
-s3fsImpl.create({ACL: "public-read"});
+var s3handle=new aws.S3({
+    "accessKeyId":  process.env.AWS_ACCESS_KEY || "AKIAIMHGVLTK2473SPVQ",
+    "secretAccessKey" : process.env.AWS_SECRET_KEY || "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"
+});
+s3fsImpl.create();
 
 module.exports = {
     index: function(req, res) {
@@ -65,14 +69,16 @@ module.exports = {
 
                     if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.gif') {
                         var readStream = fs.createReadStream(tempPath);
-                        s3fsImpl.writeFile(imgUrl + ext, readStream,{ACL: "public-read"},function () {
+                        s3fsImpl.writeFile(imgUrl + ext, readStream,function () {
                             fs.unlink(tempPath, function (err) {
                                 if (err) throw err;
                             });
+                            var signedUrl = s3handle.getSignedUrl('getObject', {Bucket: S3_BUCKET+'/temp-images', Key: imgUrl + ext});
                             var newImg = new Models.Image({
                                 title: req.body.title,
                                 filename: imgUrl + ext,
-                                description: req.body.description
+                                description: req.body.description,
+                                signedURL: signedUrl
                             });
                             newImg.save(function(err, image) {
                                 console.log('Successfully inserted image: ' + image.filename);
