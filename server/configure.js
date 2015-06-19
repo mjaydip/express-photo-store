@@ -28,7 +28,7 @@ module.exports=function(app){
 	app.use(morgan('combined'));
 	app.use(bodyParser.urlencoded({ extended: false }));
 	app.use(bodyParser.json());
-	app.use(multer({ dest: path.join(__dirname,'../public/upload/temp')}));
+	app.use(multer({ dest: path.join(__dirname,'../public/upload')}));
 	app.use(methodOverride('X-HTTP-Method-Override'));
 	app.use(cookieParser());
 	app.use(express.static(path.join(__dirname,'../public')));
@@ -37,15 +37,15 @@ module.exports=function(app){
 	}
 	routes.initialize(app);
 	//Ensure the temporary upload folder exists
-	fs.exists(path.join(__dirname,'../public/upload/temp'),function(exists){
-		if(!exists){
-			fs.mkdir(path.join(__dirname,'../public/upload'),function(err){
-				console.log(err);
-				fs.mkdir(path.join(__dirname,'../public/upload/temp'),function(err){
-					console.log(err);
-				});
-			})
-		}
-	});
+	//fs.exists(path.join(__dirname,'../public/upload/temp'),function(exists){
+	//	if(!exists){
+	//		fs.mkdir(path.join(__dirname,'../public/upload'),function(err){
+	//			console.log(err);
+	//			fs.mkdir(path.join(__dirname,'../public/upload/temp'),function(err){
+	//				console.log(err);
+	//			});
+	//		})
+	//	}
+	//});
 	return app;
 };
