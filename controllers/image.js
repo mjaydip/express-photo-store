@@ -2,7 +2,18 @@ var fs = require('fs'),
     path = require('path'),
     sidebar = require('../helpers/sidebar'),
     Models = require('../models'),
-    md5 = require('MD5');
+    md5 = require('MD5'),
+    aws= require('aws-sdk'),
+    s3fs= require('s3fs');
+
+var AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY || "AKIAIMHGVLTK2473SPVQ";
+var AWS_SECRET_KEY = process.env.AWS_SECRET_KEY || "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";
+var S3_BUCKET = process.env.S3_BUCKET || "imguploader-assets" ;
+var s3fsImpl = new s3fs(S3_BUCKET+'/temp-images', {
+    accessKeyId: AWS_ACCESS_KEY,
+    secretAccessKey: AWS_SECRET_KEY
+});
+s3fsImpl.create({ACL: "public-read"});
 
 module.exports = {
     index: function(req, res) {
@@ -49,13 +60,15 @@ module.exports = {
                     saveImage();
                 } else {
                     var tempPath = req.files.file.path,
-                        ext = path.extname(req.files.file.name).toLowerCase(),
-                        targetPath = path.resolve('./public/upload/temp/' + imgUrl + ext);
+                        ext = path.extname(req.files.file.name).toLowerCase();
+                        //targetPath = path.resolve('./public/upload/temp/' + imgUrl + ext);
 
                     if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.gif') {
-                        fs.rename(tempPath, targetPath, function(err) {
-                            if (err) { throw err; }
-
+                        var readStream = fs.createReadStream(tempPath);
+                        s3fsImpl.writeFile(imgUrl + ext, readStream,{ACL: "public-read"},function () {
+                            fs.unlink(tempPath, function (err) {
+                                if (err) throw err;
+                            });
                             var newImg = new Models.Image({
                                 title: req.body.title,
                                 filename: imgUrl + ext,
@@ -66,6 +79,19 @@ module.exports = {
                                 res.redirect('/images/' + image.uniqueId);
                             });
                         });
+                        //fs.rename(tempPath, targetPath, function(err) {
+                        //    if (err) { throw err; }
+                        //
+                        //    var newImg = new Models.Image({
+                        //        title: req.body.title,
+                        //        filename: imgUrl + ext,
+                        //        description: req.body.description
+                        //    });
+                        //    newImg.save(function(err, image) {
+                        //        console.log('Successfully inserted image: ' + image.filename);
+                        //        res.redirect('/images/' + image.uniqueId);
+                        //    });
+                        //});
                     } else {
                         fs.unlink(tempPath, function (err) {
                             if (err) throw err;
@@ -115,8 +141,8 @@ module.exports = {
         Models.Image.findOne({ filename: { $regex: req.params.image_id } },
             function(err, image) {
                 if (err) { throw err; }
-
-                fs.unlink(path.join(__dirname,'../public/upload/temp/') + image.filename,
+                console.log("Removing image:"+image.filename);
+                s3fsImpl.unlink(image.filename,
                     function(err) {
                         if (err) { throw err; }
 
