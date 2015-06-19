@@ -20,24 +20,16 @@ $(function(){
         event.preventDefault();
 
         var $this = $(this);
+        var imgId = $(this).data('id');
 
-        var remove = confirm('Are you sure you want to delete this image?');
-        if (remove) {
-
-            var imgId = $(this).data('id');
-
-            $.ajax({
-                url: '/images/' + imgId,
-                type: 'DELETE'
-            }).done(function(result) {
-                if (result) {
-                    $this.removeClass('btn-danger').addClass('btn-success');
-                    $this.find('i').removeClass('fa-times').addClass('fa-check');
-                    $this.append('<span> Deleted!</span>');
-                    window.location.replace('/');
-                }
-            });
-        }
+        $.ajax({
+            url: '/images/' + imgId,
+            type: 'DELETE'
+        }).done(function(result) {
+            if (result) {
+                window.location.replace('/');
+            }
+        });
     });
 
     $('#login-btn').click(function(){
