@@ -2,6 +2,7 @@
 
 This is a basic express js web application to store and browse images of your choice.
 It gives you a building block to create a complex web application rendered on server and having AWS as asset storage service.
+It has configuration to deploy in heroku from your git repo.
 
 It is built with,
 - Express js on top of Node js
@@ -29,4 +30,5 @@ Above steps should give a running application with an extensible expressjs appli
 Feel free to fork or submit PRs in case of any bugs identified. I will appreciate your interest.
 
 Thanks
+
 Happy Learning!
