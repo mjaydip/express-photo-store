@@ -29,6 +29,4 @@ Above steps should give a running application with an extensible expressjs appli
 
 Feel free to fork or submit PRs in case of any bugs identified. I will appreciate your interest.
 
-Thanks
-
-Happy Learning!
+Thanks!
